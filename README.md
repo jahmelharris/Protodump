@@ -12,7 +12,7 @@ This will create a directory named "app". Protodump can then be used to scan and
 java -jar protodump.jar -p <path/do/decompiled/apk> -t smali
 
 ## Raw 
-Raw mode is useful if you you have a non supported description you've extracted manually e.g. from a .net or java file. Note: currently only text is supported so probably not useful for native binaries (unless you have the source code).
+Raw mode is useful if you have a non supported description you've extracted manually e.g. from a .net or java file. Note: currently only text is supported so probably not useful for native binaries (unless you have the source code).
 
 For example, Person.proto can be extracted from the following descriptor:
 
