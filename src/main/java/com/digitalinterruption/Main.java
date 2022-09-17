@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 public class Main {
     static StringBuffer protoFile = new StringBuffer();
 
-    public static HashMap<Integer, String>TypeLookup = new HashMap<Integer, String>(){{
+    public static HashMap<Integer, String>TypeLookup = new HashMap<>(){{
         put(1,"double");
         put(2,"float");
         put(3,"int64");
@@ -42,7 +42,7 @@ public class Main {
 
     }};
 
-    public static HashMap<String, String>LabelLookup = new HashMap<String, String>(){{
+    public static HashMap<String, String>LabelLookup = new HashMap<>(){{
         put("LABEL_OPTIONAL","optional");
         put("LABEL_REPEATED","repeated");
         put("LABEL_REQUIRED","required");
