@@ -2,7 +2,10 @@
 
 Protdump is a tool to extra protobuf .proto definitions from binaries. Currently two modes are supported but more may be added in the future.
 
-## Smali
+## Example
+Note: Example files for Raw and Bin can be found in the sample-input directory
+
+### Smali
 First convert an APK into smali using apktool (or similar). e.g: 
 
 apktool d app.apk
@@ -11,13 +14,18 @@ This will create a directory named "app". Protodump can then be used to scan and
 
 java -jar protodump.jar -p <path/do/decompiled/apk> -t smali
 
-## Raw 
-Raw mode is useful if you have a non supported description you've extracted manually e.g. from a .net or java file. Note: currently only text is supported so probably not useful for native binaries (unless you have the source code).
+### Raw 
+Raw mode is useful if you have a description you've extracted manually from source code (e.g. .NET or java reverse engineering) or you have the source but lost the .proto files.
 
 For example, Person.proto can be extracted from the following descriptor:
 
-```\n\014Person.proto\022\010tutorial\"\333\001\n\006Person\022\014\n\004name\030\001 \001(\t\022\n\n\002id\030\002 \001(\005\022\r\n\005email\030\003 \001(\t\022,\n\006phones\030\004 \003(\0132\034.tutorial.Person.PhoneNumber\032M\n\013PhoneNumber\022\016\n\006number\030\001 \001(\t\022.\n\004type\030\002 \001(\0162\032.tutorial.Person.PhoneType:\004HOME\"+\n\tPhoneType\022\n\n\006MOBILE\020\000\022\010\n\004HOME\020\001\022\010\n\004WORK\020\002\"/\n\013AddressBook\022 \n\006people\030\001 \003(\0132\020.tutorial.PersonB2\n\033com.example.tutorial.protosB\021AddressBookProtosP\001```
+`\n\014Person.proto\022\010tutorial\"\333\001\n\006Person\022\014\n\004name\030\001 \001(\t\022\n\n\002id\030\002 \001(\005\022\r\n\005email\030\003 \001(\t\022,\n\006phones\030\004 \003(\0132\034.tutorial.Person.PhoneNumber\032M\n\013PhoneNumber\022\016\n\006number\030\001 \001(\t\022.\n\004type\030\002 \001(\0162\032.tutorial.Person.PhoneType:\004HOME\"+\n\tPhoneType\022\n\n\006MOBILE\020\000\022\010\n\004HOME\020\001\022\010\n\004WORK\020\002\"/\n\013AddressBook\022 \n\006people\030\001 \003(\0132\020.tutorial.PersonB2\n\033com.example.tutorial.protosB\021AddressBookProtosP\001`
 
 java -jar protodump.jar -p </path/to/file/with/extracted/descriptor> -t raw
+
+### Bin
+Binary mode is for when you've extracted the descriptor from a compiled binary. This will just be a stream of bytes.
+
+java -jar protodump.jar -p </path/to/file/with/extracted/descriptor> -t bin
 
 

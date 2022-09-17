@@ -67,7 +67,7 @@ public class Main {
                 .argName("type")
                 .hasArg()
                 .required(true)
-                .desc("[smali | raw] Type of file parse proto file from. Currently only smali and raw are supported").build();
+                .desc("[smali | raw | bin] Type of file parse proto file from. Currently only smali, raw and bin are supported").build();
         options.addOption(typeArg);
 
 
@@ -89,14 +89,25 @@ public class Main {
             ScanDirectoryForSmaliFiles(directory);
         }
         else if(type.equals("raw")) {
-            System.out.println("Parsing raw file in "+directory);
+            System.out.println("Parsing raw file: "+directory);
             try {
                 List<String> rawFile = Files.readAllLines(Path.of(directory));
                 StringBuilder sb = new StringBuilder();
                 for (String str : rawFile) {
                     sb.append(str);
                 }
-                Convert(StringEscapeUtils.unescapeJava(sb.toString()));
+                ConvertString(StringEscapeUtils.unescapeJava(sb.toString()));
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        else if(type.equals("bin")) {
+            System.out.println("Parsing binary file: "+directory);
+            try {
+                byte[] rawFile = Files.readAllBytes(Path.of(directory));
+                Convert(rawFile);
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -123,7 +134,7 @@ public class Main {
 
         try(Stream<String> lines = Files.lines(file)) {
             lines.flatMap(line -> m.reset(line).results().limit(1))
-                    .forEach(mr -> {Convert(StringEscapeUtils.unescapeJava(mr.group(1)));});
+                    .forEach(mr -> {ConvertString(StringEscapeUtils.unescapeJava(mr.group(1)));});
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -187,11 +198,14 @@ public class Main {
         protoFile.append(System.getProperty("line.separator"));
     }
 
-    static void Convert(String str)
-    {
+    static void ConvertString(String str) {
+        byte[] bytes = str.getBytes(Charset.forName("ISO-8859-1"));
+        Convert(bytes);
+    }
+    static void Convert(byte[] bytes) {
+
         protoFile.setLength(0);
         DescriptorProtos.FileDescriptorProto proto = null;
-        byte[] bytes = str.getBytes( Charset.forName("ISO-8859-1"));
 
         try {
             proto = DescriptorProtos.FileDescriptorProto.parseFrom(bytes);
